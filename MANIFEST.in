@@ -1,0 +1,3 @@
+recursive-include description_generator/Tools *
+recursive-include description_generator/Prompts *
+recursive-include description_generator/Knowledge *

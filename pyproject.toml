@@ -3,9 +3,19 @@ name = "description-generator"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
     "langchain-core>=0.3.54",
     "langchain-openai>=0.3.14",
     "langchain>=0.3.23",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+"description_generator" = ["Knowledge/*.md"]

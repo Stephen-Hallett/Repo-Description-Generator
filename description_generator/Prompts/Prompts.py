@@ -1,25 +1,4 @@
-import os
-
-from langchain.output_parsers.openai_tools import PydanticToolsParser
-from langchain_core.output_parsers.string import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from pydantic import BaseModel, Field
-
-
-class ProgrammingTools(BaseModel):
-    languages: list[str] = Field(
-        ..., description="A list of the programming languages used in the project"
-    )
-    frameworks: list[str] = Field(
-        ..., description="A list of the programming frameworks used in the project"
-    )
-
-# -----------------
-
-info_model = ChatOpenAI(
-    api_key=os.environ["OPENAI_API_KEY"], temperature=0.1
-).bind_tools([ProgrammingTools], strict=True, tool_choice="ProgrammingTools")
 
 info_prompt = ChatPromptTemplate.from_messages(
     [
@@ -85,39 +64,3 @@ languages: {languages}. With frameworks {frameworks}. \n\
         ),
     ]
 )
-
-info_chain = info_prompt | info_model | PydanticToolsParser(tools=[ProgrammingTools])
-purpose_chain = (
-    purpose_prompt
-    | ChatOpenAI(api_key=os.environ["OPENAI_API_KEY"], temperature=0.5)
-    | StrOutputParser()
-)
-final_chain = (
-    description_prompt
-    | ChatOpenAI(api_key=os.environ["OPENAI_API_KEY"], temperature=0.7)
-    | StrOutputParser()
-)
-
-with open("example_readme.md") as f:
-    example_contents = f.read()
-
-with open("test_readme.md") as f:
-    contents = f.read()
-
-
-tools_results = info_chain.invoke(
-    {"example_contents": example_contents, "input": contents}
-)
-
-purpose_result = purpose_chain.invoke(
-    {"example_contents": example_contents, "input": contents}
-)
-
-description = final_chain.invoke(
-    {
-        "languages": ", ".join(list(tools_results[0].languages)),
-        "frameworks": ", ".join(list(tools_results[0].frameworks)),
-        "purpose": purpose_result,
-    }
-)
-
