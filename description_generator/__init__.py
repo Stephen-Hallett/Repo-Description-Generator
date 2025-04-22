@@ -24,7 +24,7 @@ class DescriptionGenerator:
         )
         self.description_chain = (
             description_prompt
-            | ChatOpenAI(api_key=openai_key, temperature=0.7)
+            | ChatOpenAI(api_key=openai_key, temperature=0.8)
             | StrOutputParser()
         )
 
