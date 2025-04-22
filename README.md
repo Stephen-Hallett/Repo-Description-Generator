@@ -28,6 +28,7 @@ generator = DescriptionGenerator(os.environ["OPENAI_API_KEY"])
 
 print(generator.generate(readme_contents))
 
-# This project utilizes Python with the Langchain framework to create a tool that employs a language model
-# for automating the generation of project descriptions by analyzing the content of a README or documentation file.
+# This project utilizes Python with the Langchain framework to create a tool that employs
+# a language modelfor automating the generation of project descriptions by analyzing
+# the content of a README or documentation file.
 ```
